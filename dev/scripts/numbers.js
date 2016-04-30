@@ -1,5 +1,5 @@
 /*globals define*/
-define(function (){
+define(['events'], function (events){
   'use strict'
 
   var self = {}
@@ -14,6 +14,11 @@ define(function (){
   		}
 
   		total += value
+  	})
+
+  	events.publish('added', {
+  		operands: operands,
+  		result: total
   	})
 
   	return total

@@ -1,5 +1,5 @@
 /*globals define, describe*/
-define(['numbers'], function (numbers) {
+define(['numbers', 'events'], function (numbers, events) {
 	'use strict'
 
 	describe('The numbers module', function () {
@@ -35,6 +35,18 @@ define(['numbers'], function (numbers) {
 				output = numbers.add(this.numberInput1, this.stringInput2)
 
 				expect(output).toEqual(1)
+			})
+
+			it('shoud publish an added event showing the operands passed to the method and the result', function () {
+				spyOn(events, 'publish')
+
+				numbers.add(this.numberInput1, this.numberInput2)
+
+				expect(events.publish).toHaveBeenCalled()
+				expect(events.publish).toHaveBeenCalledWith('added', {
+					operands: [this.numberInput1, this.numberInput2],
+					result: 3
+				})
 			})
 		})
 	})
