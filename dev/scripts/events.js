@@ -6,6 +6,7 @@ define(function () {
         events = {};
 
     self.publish = function publish(eventName, data) {
+    	// alert('wwo')
         var subscribers, x, length;
 
         if (!events[eventName]) {
