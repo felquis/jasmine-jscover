@@ -38,6 +38,7 @@ define(['numbers', 'events'], function (numbers, events) {
 			// })
 
 			it('shoud publish an added event showing the operands passed to the method and the result', function () {
+				spyOn(events, 'publish')
 				// spyOn(events, 'publish').and.callThrough() // it will call the alert inside events
 
 				// spyOn(events, 'publish').and.returnValue(false)
@@ -58,6 +59,20 @@ define(['numbers', 'events'], function (numbers, events) {
 					operands: [this.numberInput1, this.numberInput2],
 					result: 3
 				})
+
+				expect(events.publish.calls.any()).toBe(true)
+				expect(events.publish.calls.count()).toEqual(1)
+
+				//
+				numbers.add(this.numberInput1, this.stringInput1)
+				expect(events.publish.calls.count()).toEqual(2)
+				expect(events.publish.calls.argsFor(1)).toEqual(['added', {
+					operands: [this.numberInput1, this.stringInput1],
+					result: 2
+				}])
+
+				// expect to call any String, and any Object.. more generic test
+				expect(events.publish.calls.argsFor(1)).toEqual([jasmine.any(String), jasmine.any(Object)])
 			})
 		})
 	})
