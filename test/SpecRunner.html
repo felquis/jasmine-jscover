@@ -18,7 +18,8 @@
 		require({
 			baseUrl: '../dev/scripts',
 			paths: {
-				spec: '../../test/spec'
+				spec: '../../test/spec',
+				lib: '../../test/lib'
 			}
 		}, ['spec/numbers'], function (numbers) {
 			jasmine.getEnv().execute()

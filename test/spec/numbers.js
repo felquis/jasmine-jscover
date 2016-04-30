@@ -1,5 +1,5 @@
 /*globals define, describe*/
-define(['numbers', 'events'], function (numbers, events) {
+define(['numbers', 'events', 'lib/matchers'], function (numbers, events, matchers) {
 	'use strict'
 
 	describe('The numbers module', function () {
@@ -12,6 +12,8 @@ define(['numbers', 'events'], function (numbers, events) {
 				this.numberInput2 = 2
 				this.stringInput1 = '1'
 				this.stringInput2 = 'oops'
+
+				jasmine.addMatchers(matchers)
 			})
 
 			// // xit() will be pending
@@ -87,6 +89,17 @@ define(['numbers', 'events'], function (numbers, events) {
 				for(x = 0, length = calls.length; x < length; x+=1) {
 					expect(calls[x].object.id).toEqual('events')
 				}
+			})
+
+			it('should return numbers that are either odd or even', function () {
+				output = numbers.add(this.numberInput1, this.numberInput2)
+
+				expect(output).toBeOdd()
+
+				// custom error message
+				// output = numbers.add(this.numberInput1, this.numberInput1)
+
+				// expect(output).toBeOdd()
 			})
 		})
 	})
