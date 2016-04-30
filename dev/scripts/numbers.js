@@ -1,5 +1,5 @@
 /*globals define*/
-define(['events'], function (events){
+define(['events', 'jquery'], function (events, $){
   'use strict'
 
   var self = {}
@@ -16,10 +16,18 @@ define(['events'], function (events){
   		total += value
   	})
 
-  	events.publish('added', {
-  		operands: operands,
-  		result: total
+  	$.get('http://numbersapi.com/' + total + '/trivia', function (fact) {
+  		events.publish('added', {
+  			operands: operands,
+  			result: total,
+  			triviaFact: fact
+  		})
   	})
+
+  	// events.publish('added', {
+  	// 	operands: operands,
+  	// 	result: total
+  	// })
 
   	return total
   }

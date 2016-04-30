@@ -1,4 +1,6 @@
 /*globals define, describe*/
+// jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+
 define(['numbers', 'events', 'lib/matchers'], function (numbers, events, matchers) {
 	'use strict'
 
@@ -39,56 +41,20 @@ define(['numbers', 'events', 'lib/matchers'], function (numbers, events, matcher
 			// 	expect(output).toEqual(1)
 			// })
 
-			it('shoud publish an added event showing the operands passed to the method and the result', function () {
-				var x, length, calls;
+			it('shoud publish an added event showing the operands passed to the method, the result and a number fact', function (done) {
+				var that = this
 
-				spyOn(events, 'publish')
-				// spyOn(events, 'publish').and.callThrough() // it will call the alert inside events
+				events.subscribe('added', function (data) {
+					expect(data.operands).toEqual([that.numberInput1, that.numberInput2])
+					expect(data.result).toEqual(3)
+					expect(data.triviaFact).toEqual(jasmine.any(String))
 
-				// spyOn(events, 'publish').and.returnValue(false)
+					console.log(data.triviaFact)
 
-				// spyOn(events, 'publish').and.callFake(function (name, args) {
-				// 	expect(name).toEqual('adde')
-				// })
-
-				// spyOn(events, 'publish').and.throwError('oops')
-				// expect(function () {
-				// 	numbers.add(1,1)
-				// }).toThrowError('oops')
-
-				numbers.add(this.numberInput1, this.numberInput2)
-				// events.publish.calls.reset()
-
-				expect(events.publish).toHaveBeenCalled()
-				expect(events.publish).toHaveBeenCalledWith('added', {
-					operands: [this.numberInput1, this.numberInput2],
-					result: 3
+					done()
 				})
 
-				expect(events.publish.calls.any()).toBe(true)
-				expect(events.publish.calls.count()).toEqual(1)
-
-				//
-				numbers.add(this.numberInput1, this.stringInput1)
-				expect(events.publish.calls.count()).toEqual(2)
-				expect(events.publish.calls.argsFor(1)).toEqual(['added', {
-					operands: [this.numberInput1, this.stringInput1],
-					result: 2
-				}])
-
-				// expect to call any String, and any Object.. more generic test
-				expect(events.publish.calls.mostRecent().args).toEqual([jasmine.any(String), jasmine.any(Object)])
-
-				expect(events.publish.calls.allArgs()).toEqual([
-						[jasmine.any(String), jasmine.any(Object)],
-						[jasmine.any(String), jasmine.any(Object)]
-					])
-
-				calls = events.publish.calls.all()
-
-				for(x = 0, length = calls.length; x < length; x+=1) {
-					expect(calls[x].object.id).toEqual('events')
-				}
+				numbers.add(this.numberInput1, this.numberInput2)
 			})
 
 			it('should return numbers that are either odd or even', function () {
