@@ -102,5 +102,29 @@ define(['numbers', 'events', 'lib/matchers'], function (numbers, events, matcher
 				// expect(output).toBeOdd()
 			})
 		})
+
+		describe('The addAfterDelay method', function () {
+			var noop = function () {}
+
+			beforeEach(function () {
+				spyOn(numbers, 'add')
+
+				jasmine.clock().install()
+			})
+
+			afterEach(function () {
+				jasmine.clock().uninstall()
+			})
+
+			it('should invoke the add method after a specified delay', function () {
+				numbers.addAfterDelay(1000, noop, 1, 2)
+
+				expect(numbers.add).not.toHaveBeenCalled()
+
+				jasmine.clock().tick(1001)
+
+				expect(numbers.add).toHaveBeenCalled()
+			})
+		})
 	})
 })

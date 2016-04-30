@@ -24,5 +24,15 @@ define(['events'], function (events){
   	return total
   }
 
+  self.addAfterDelay = function (delay, callback) {
+  	var timeoutDelay = Array.prototype.shift.call(arguments),
+  			callback = Array.prototype.shift.call(arguments),
+  			operands = arguments
+
+  	window.setTimeout(function () {
+  		callback(self.add.apply(this, operands))
+  	}, timeoutDelay)
+  }
+
   return self
 })
