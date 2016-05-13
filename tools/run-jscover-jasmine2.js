@@ -102,16 +102,31 @@ page.open(system.args[1], function(status) {
 
                 if (list && list.length > 0) {
                     console.log('');
+                    console.log(list.length + ' test(s) FAILED:')
 
                     for (i = 0; i < list.length; ++i) {
                         var el = list[i],
                             desc = el.querySelector('.jasmine-description') || el.querySelector('.description'),
                             msg = el.querySelector('.jasmine-messages > .jasmine-result-message') || el.querySelector('.result-message');
                         console.log('');
-                        console.log(desc.innerText);
-                        console.log(msg.innerText);
+                        console.log('    ' + desc.innerText);
+                        console.log('    ' + msg.innerText);
                         console.log('');
                     }
+                }
+
+                // SHOW PENDING TESTS
+                function getPending() {
+                	var list = document.body.querySelectorAll('.jasmine_html-reporter .symbol-summary .pending')
+
+                	return list
+                }
+
+                var pending = getPending()
+
+                if (pending.length > 0) {
+                	console.log('')
+                	console.log(pending.length + ' Pending test(s)')
                 }
 
                 return 0

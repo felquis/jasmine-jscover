@@ -10,7 +10,9 @@
   <script src="../bower_components/requirejs/require.js"></script>
   <script type="text/javascript" src="../bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
   <script type="text/javascript" src="../bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
-  <script type="text/javascript" src="lib/hacked-boot-2.0.0.js"></script>
+  <script type="text/javascript">
+  	document.write('<script src="lib/hacked-boot-'+jasmineRequire.version()+'.js"><\/script>')
+  </script>
 </head>
 
 <body>
