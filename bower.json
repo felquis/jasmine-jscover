@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "jasmine": "2.3.4",
+    "jasmine": "2.4.1",
     "requirejs": "2.2.0",
     "jquery": "2"
   }

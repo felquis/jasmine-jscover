@@ -83,6 +83,7 @@ page.open(system.args[1], function(status) {
                 var resultText = (
             		document.body.querySelector('.jasmine-alert > .jasmine-bar.jasmine-passed,.jasmine-alert > .jasmine-bar.jasmine-skipped') ||
         			document.body.querySelector('.jasmine_html-reporter .bar') ||
+        			document.body.querySelector('.jasmine_html-reporter .jasmine-bar') ||
         			document.body.querySelector('.html-reporter .bar')
         		).innerText
 
@@ -121,6 +122,9 @@ page.open(system.args[1], function(status) {
                 	if (list.length > 0) { return list }
 
                 	list = document.body.querySelectorAll('.jasmine_html-reporter .symbol-summary .disabled')
+                	if (list.length > 0) { return list }
+
+                	list = document.body.querySelectorAll('.jasmine_html-reporter .jasmine-symbol-summary .jasmine-pending')
                 	return list
                 }
 
