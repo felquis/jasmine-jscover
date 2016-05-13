@@ -118,7 +118,9 @@ page.open(system.args[1], function(status) {
                 // SHOW PENDING TESTS
                 function getPending() {
                 	var list = document.body.querySelectorAll('.jasmine_html-reporter .symbol-summary .pending')
+                	if (list.length > 0) { return list }
 
+                	list = document.body.querySelectorAll('.jasmine_html-reporter .symbol-summary .disabled')
                 	return list
                 }
 
