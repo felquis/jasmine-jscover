@@ -46,10 +46,11 @@ define(['numbers', 'events', 'lib/matchers'], function (numbers, events, matcher
 
 				events.subscribe('added', function (data) {
 					expect(data.operands).toEqual([that.numberInput1, that.numberInput2])
-					expect(data.result).toEqual(3)
+					// ERROR should be 3
+					expect(data.result).toEqual(4)
 					expect(data.triviaFact).toEqual(jasmine.any(String))
 
-					console.log(data.triviaFact)
+					// console.log(data.triviaFact)
 
 					done()
 				})
@@ -57,7 +58,7 @@ define(['numbers', 'events', 'lib/matchers'], function (numbers, events, matcher
 				numbers.add(this.numberInput1, this.numberInput2)
 			})
 
-			it('should return numbers that are either odd or even', function () {
+			xit('should return numbers that are either odd or even', function () {
 				output = numbers.add(this.numberInput1, this.numberInput2)
 
 				expect(output).toBeOdd()

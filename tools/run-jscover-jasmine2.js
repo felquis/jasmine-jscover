@@ -58,65 +58,65 @@ page.open(system.args[1], function(status) {
     } else {
         waitFor(function(){
             return page.evaluate(function(){
-				function checkJasmineVersion(version) {
-					// version resolve, manage jasmine execution for each jasmine version
-					var versions = {
-						latest: this['2.4.1'],
-						// https://github.com/jasmine/jasmine/blob/v2.0.0/src/html/HtmlReporter.js#L23
-						// https://github.com/jasmine/jasmine/blob/v2.0.1/src/html/HtmlReporter.js#L24
-						'2.0.x': function () {
-					        return document.body.querySelector('.jasmine_html-reporter .duration') !== null
-						},
-						// https://github.com/jasmine/jasmine/blob/v2.4.1/src/html/HtmlReporter.js#L28
-						'2.4.x': function () {
-							// this line make it works with pending tests
-							return document.body.querySelector('.jasmine-duration').innerText.indexOf('finished in') !== -1
-						},
-					}
+				// https://github.com/jasmine/jasmine/blob/v2.0.0/src/html/HtmlReporter.js#L25
+				// https://github.com/jasmine/jasmine/blob/v2.0.1/src/html/HtmlReporter.js#L24
+				var elem = document.querySelector('.html-reporter .duration') ||
+						   document.querySelector('.jasmine_html-reporter .duration') ||
+						   document.querySelector('.jasmine-duration')
 
-					// if there's no version use the latest
-					if (!version) { return versions['latest']() }
-
-					// put a X in the end of the version
-					version = version.replace(/(\d.\d).(\d)/, '$1.x')
-
-					// check if this version is set
-					if (versions[version]) { return versions[version]() }
-					// if not set, use latest insted
-					else { return versions['latest']() }
-				}
-
-                return checkJasmineVersion(jasmineRequire && jasmineRequire.version() || 0)
+		        return elem && elem.innerText.indexOf('finished') !== -1
             });
         }, function(){
             var exitCode = page.evaluate(function(){
                 console.log('');
 
                 var title = 'Jasmine';
-                var version = document.body.querySelector('.jasmine-version').innerText;
-                var duration = document.body.querySelector('.jasmine-duration').innerText;
+                var version = jasmineRequire.version();
+                var duration = (document.body.querySelector('.jasmine-duration') ||
+                				document.body.querySelector('.jasmine_html-reporter .duration') ||
+                				document.body.querySelector('.html-reporter .duration')).innerText
+
                 var banner = title + ' ' + version + ' ' + duration;
                 console.log(banner);
 
-                var list = document.body.querySelectorAll('.jasmine-results > .jasmine-failures > .jasmine-spec-detail.jasmine-failed');
+                // display jasmine summary
+                var resultText = (
+            		document.body.querySelector('.jasmine-alert > .jasmine-bar.jasmine-passed,.jasmine-alert > .jasmine-bar.jasmine-skipped') ||
+        			document.body.querySelector('.jasmine_html-reporter .bar') ||
+        			document.body.querySelector('.html-reporter .bar')
+        		).innerText
+
+              	console.log(resultText);
+
+                function getList() {
+	                var list = document.body.querySelectorAll('.jasmine-results > .jasmine-failures > .jasmine-spec-detail.jasmine-failed')
+
+	                if (list.length > 0) { return list }
+
+	                list = document.body.querySelectorAll('.jasmine_html-reporter .failures > .spec-detail.failed')
+
+	            	return list
+                }
+
+                var list = getList()
+
                 if (list && list.length > 0) {
                     console.log('');
-                    console.log(list.length + ' test(s) FAILED:');
+
                     for (i = 0; i < list.length; ++i) {
                         var el = list[i],
-                            desc = el.querySelector('.jasmine-description'),
-                            msg = el.querySelector('.jasmine-messages > .jasmine-result-message');
+                            desc = el.querySelector('.jasmine-description') || el.querySelector('.description'),
+                            msg = el.querySelector('.jasmine-messages > .jasmine-result-message') || el.querySelector('.result-message');
                         console.log('');
                         console.log(desc.innerText);
                         console.log(msg.innerText);
                         console.log('');
                     }
-                    return 1;
-                } else {
-                    console.log(document.body.querySelector('.jasmine-alert > .jasmine-bar.jasmine-passed,.jasmine-alert > .jasmine-bar.jasmine-skipped').innerText);
-                    return 0;
                 }
+
+                return 0
             });
+
             if (system.args.length == 2) {
                 page.evaluate(function(){
                     jscoverage_report('phantom');

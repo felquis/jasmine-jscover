@@ -1,0 +1,21 @@
+{
+  "name": "jasmine-course",
+  "version": "1.0.0",
+  "description": "inside `./tools` run `sh jscover-server.sh`",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "bower install",
+    "jscover": "phantomjs tools/run-jscover-jasmine2.js http://localhost:8080/test/SpecRunner.html",
+    "start": "concurrently 'sh tools/jscover-server.sh' 'npm run jscover'"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "bower": "^1.7.9",
+    "concurrently": "^2.0.0"
+  }
+}
