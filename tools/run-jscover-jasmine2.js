@@ -127,6 +127,9 @@ page.open(system.args[1], function(status) {
                 if (pending.length > 0) {
                 	console.log('')
                 	console.log(pending.length + ' Pending test(s)')
+                	Array.prototype.slice.call(pending).forEach(function (item) {
+                		console.log('    - ' + item.getAttribute('title'))
+                	})
                 }
 
                 return 0
